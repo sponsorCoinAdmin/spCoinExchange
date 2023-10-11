@@ -3,12 +3,13 @@ let DEBUG_MODE = false;
 
 const { ethers } = require('ethers')
 const { AlphaRouterServiceDebug } = require('./AlphaRouterServiceDebug')
+
 const { AlphaRouterService } = require('./AlphaRouterService');
 const { UniTokenServices } = require('./uniTokenServices')
 const { TradeType } = require('@uniswap/sdk-core')
 
 const INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
-const CHAIN_ID = parseInt(process.env.GORELI_CHAIN_ID)
+const CHAIN_ID = parseInt(process.env.GOERLI_CHAIN_ID)
 const WALLET_ADDRESS = process.env.WALLET_ADDRESS
 const WALLET_SECRET = process.env.WALLET_SECRET
 
@@ -123,12 +124,12 @@ exeExactOutputTransactionTest = async( ) => {
 }
 
 main = async( ) => {
-    // await getExactInputStrQuoteTest();
-    // await getExactOutputStrQuoteTest();
-    // console.log("*** EXECUTING getExactInputRouteQuoteTest() *****************************");
-    // await getExactInputRouteQuoteTest();
-    // console.log("*** EXECUTING getExactOutputRouteQuoteTest() *****************************");
-    // await getExactInputRouteQuoteTest();
+    await getExactInputStrQuoteTest();
+    await getExactOutputStrQuoteTest();
+    console.log("*** EXECUTING getExactInputRouteQuoteTest() *****************************");
+    await getExactInputRouteQuoteTest();
+    console.log("*** EXECUTING getExactOutputRouteQuoteTest() *****************************");
+    await getExactInputRouteQuoteTest();
     await exeExactInputTransactionTest();
     console.log("FINISHED EXITING")
 }

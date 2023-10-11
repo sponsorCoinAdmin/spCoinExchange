@@ -1,46 +1,71 @@
-require("dotenv").config();
-let DEBUG_MODE = false;
+const { AlphaRouter } = require('@uniswap/smart-order-router')
+const { Token, CurrencyAmount, TradeType, Percent } = require('@uniswap/sdk-core')
+const { ethers, BigNumber } = require('ethers')
+const JSBI  = require('jsbi') // jsbi@3.2.5
 
-const { ethers } = require('ethers')
-const { AlphaRouterServiceDebug } = require('./AlphaRouterServiceDebug')
-const { AlphaRouterService } = require('./AlphaRouterService');
-const { UniTokenServices } = require('./uniTokenServices')
+const V3_SWAP_ROUTER_ADDRESS = '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'
 
-const INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
-const CHAIN_ID = parseInt(process.env.GOERLI_CHAIN_ID)
+require('dotenv').config()
 const WALLET_ADDRESS = process.env.WALLET_ADDRESS
 const WALLET_SECRET = process.env.WALLET_SECRET
+const INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
 
-const provider = new ethers.providers.JsonRpcProvider(INFURA_TEST_URL) // Ropsten
+const web3Provider = new ethers.providers.JsonRpcProvider(INFURA_TEST_URL) // Ropsten
 
-const WETH_ADDRESS   = process.env.GOERLI_WETH
-const SPCOIN_ADDRESS = process.env.GOERLI_SPCOIN
-const UNI_ADDRESS    = process.env.GOERLI_UNI
+const chainId = 5
+const router = new AlphaRouter({ chainId: chainId, provider: web3Provider})
 
-let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug(ethers, CHAIN_ID, provider) : new AlphaRouterService();
+const name0 = 'Wrapped Ether'
+const symbol0 = 'WETH'
+const decimals0 = 18
+const address0 = process.env.GOERLI_WETH
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+const name1 = 'Uniswap Token'
+const symbol1 = 'UNI'
+const decimals1 = 18
+const address1 = process.env.GOERLI_UNI
 
-async function main( ) {
+const WETH = new Token(chainId, address0, decimals0, symbol0, name0)
+const UNI = new Token(chainId, address1, decimals1, symbol1, name1)
 
-  const inputTokenAmount = '0.01'
-  // const wei = ethers.utils.parseUnits(inputTokenAmount, 18)
-  // const inputTokenAmountInWei = CurrencyAmount.fromRawAmount(WETH, JSBI.BigInt(wei))
-  let approvalAmount  = ethers.utils.parseUnits('1', 18).toString()
-  let slippagePercent = 25;
-  let gasLimit        = 1000000
-  
-  await ARS.exeExactInputTransaction(
-    WALLET_ADDRESS,
-    WALLET_SECRET,
-    WETH_ADDRESS,
-    UNI_ADDRESS,
-    approvalAmount,
-    inputTokenAmount,
-    slippagePercent,
-    gasLimit
-  );
+const wei = ethers.utils.parseUnits('0.01', 18)
+const inputAmount = CurrencyAmount.fromRawAmount(WETH, JSBI.BigInt(wei))
 
+async function main() {
+  const route = await router.route(
+    inputAmount,
+    UNI,
+    TradeType.EXACT_INPUT,
+    {
+      recipient: WALLET_ADDRESS,
+      slippageTolerance: new Percent(25, 100),
+      deadline: Math.floor(Date.now()/1000 + 1800)
+    }
+  )
+
+  console.log(`Quote Exact In: ${route.quote.toFixed(10)}`)
+
+  const transaction = {
+    data: route.methodParameters.calldata,
+    to: V3_SWAP_ROUTER_ADDRESS,
+    value: BigNumber.from(route.methodParameters.value),
+    from: WALLET_ADDRESS,
+    gasPrice: BigNumber.from(route.gasPriceWei),
+    gasLimit: ethers.utils.hexlify(1000000)
+  }
+
+  const wallet = new ethers.Wallet(WALLET_SECRET)
+  const connectedWallet = wallet.connect(web3Provider)
+
+  const approvalAmount = ethers.utils.parseUnits('1', 18).toString()
+  const ERC20ABI = require('./abi.json')
+  const contract0 = new ethers.Contract(address0, ERC20ABI, web3Provider)
+  await contract0.connect(connectedWallet).approve(
+    V3_SWAP_ROUTER_ADDRESS,
+    approvalAmount
+  )
+
+  const tradeTransaction = await connectedWallet.sendTransaction(transaction)
 }
 
 main()

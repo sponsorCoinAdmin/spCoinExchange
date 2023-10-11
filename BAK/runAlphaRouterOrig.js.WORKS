@@ -12,7 +12,7 @@ const INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
 
 const web3Provider = new ethers.providers.JsonRpcProvider(INFURA_TEST_URL) // Ropsten
 
-const CHAIN_ID = parseInt(process.env.GORELI_CHAIN_ID)
+const CHAIN_ID = parseInt(process.env.GOERLI_CHAIN_ID)
 const router = new AlphaRouter({ chainId: CHAIN_ID, provider: web3Provider})
 
 const name0 = 'Wrapped Ether'
