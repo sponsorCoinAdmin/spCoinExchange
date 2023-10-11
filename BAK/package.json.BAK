@@ -12,7 +12,10 @@
   },
   "author": "Robin Melanson",
   "license": "ISC",
-  "homepage": "",
+  "bugs": {
+    "url": "https://github.com/sponsorCoinAdmin/Tutorials-HardHat-SingleHop/issues"
+  },
+  "homepage": "https://github.com/sponsorCoinAdmin/Tutorials-HardHat-SingleHop#readme",
   "devDependencies": {
     "@types/node": "^18.8.2",
     "@uniswap/v3-sdk": "^3.9.0",
