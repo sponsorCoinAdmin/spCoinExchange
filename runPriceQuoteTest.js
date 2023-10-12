@@ -2,25 +2,23 @@ require("dotenv").config();
 let DEBUG_MODE = false;
 
 const { ethers } = require('ethers')
-const { AlphaRouterServiceDebug } = require('./lib/debug/AlphaRouterServiceDebug')
-
-const { AlphaRouterService, UniTokenServices } = require('./lib/prod/AlphaRouterService');
-// const { UniTokenServices } = require('./uniTokenServices')
 const { TradeType } = require('@uniswap/sdk-core')
 
-const INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
+const { AlphaRouterServiceDebug } = require('./lib/debug/AlphaRouterServiceDebug')
+const { AlphaRouterService } = require('./lib/prod/AlphaRouterService');
+
+const GOERLI_INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
 const CHAIN_ID = parseInt(process.env.GOERLI_CHAIN_ID)
 const WALLET_ADDRESS = process.env.WALLET_ADDRESS
 const WALLET_SECRET = process.env.WALLET_SECRET
 
-const provider = new ethers.providers.JsonRpcProvider(INFURA_TEST_URL) // Ropsten
 
 const WETH_ADDRESS = process.env.GOERLI_WETH
 const SPCOIN_ADDRESS = process.env.GOERLI_SPCOIN
 const UNI_ADDRESS = process.env.GOERLI_UNI
 
-let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug(ethers, CHAIN_ID, provider) : new AlphaRouterService();
-let UTS = new UniTokenServices(ethers, CHAIN_ID, provider)
+let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL)
+let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug(ethers, CHAIN_ID, provider) : new AlphaRouterService(ethers, CHAIN_ID, provider);
 
 getExactInputStrQuoteTest = async( ) => {
     console.log("*** EXECUTING getExactInputStrQuoteTest() ******************************");
@@ -79,14 +77,6 @@ exeExactInputTransactionTest = async( ) => {
     let slippagePercent  = 25;
     let gasLimit         = 1000000
 
-    /*
-    let tokenInContract  = UTS.getERC20Contract(tokenInAddr)
-    let tokenOutContract = UTS.getERC20Contract(tokenOutAddr)
-    tokenInName          = await tokenInContract.name();
-    tokenOutName         = await tokenOutContract.name();
-
-    console.log("Swapping" )"
-    */   
     tradeTransaction = await ARS.exeExactInputTransaction(
       WALLET_ADDRESS,
       WALLET_SECRET,
