@@ -1,5 +1,5 @@
 require("dotenv").config();
-const ERC20ABI = require('./abi.json')
+const ERC20ABI = require('./interfaces/abi.json')
 
 const { AlphaRouter } = require('@uniswap/smart-order-router')
 const { TradeType, Percent } = require('@uniswap/sdk-core')
