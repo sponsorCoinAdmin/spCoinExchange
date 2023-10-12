@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const { Token : UniToken, CurrencyAmount } = require('@uniswap/sdk-core')
-const ERC20ABI = require('./interfaces/abi.json')
+const ERC20ABI = require('../interfaces/abi.json')
 const JSBI  = require('jsbi') // jsbi@3.2.5
 
 require('dotenv').config()

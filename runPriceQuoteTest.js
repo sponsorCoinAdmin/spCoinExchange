@@ -2,10 +2,10 @@ require("dotenv").config();
 let DEBUG_MODE = false;
 
 const { ethers } = require('ethers')
-const { AlphaRouterServiceDebug } = require('./AlphaRouterServiceDebug')
+const { AlphaRouterServiceDebug } = require('./lib/debug/AlphaRouterServiceDebug')
 
-const { AlphaRouterService } = require('./AlphaRouterService');
-const { UniTokenServices } = require('./uniTokenServices')
+const { AlphaRouterService, UniTokenServices } = require('./lib/prod/AlphaRouterService');
+// const { UniTokenServices } = require('./uniTokenServices')
 const { TradeType } = require('@uniswap/sdk-core')
 
 const INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL

@@ -58,7 +58,7 @@ async function main() {
   const connectedWallet = wallet.connect(web3Provider)
 
   const approvalAmount = ethers.utils.parseUnits('1', 18).toString()
-  const ERC20ABI = require('./interfaces/abi.json')
+  const ERC20ABI = require('./lib/interfaces/abi.json')
   const contract0 = new ethers.Contract(address0, ERC20ABI, web3Provider)
   await contract0.connect(connectedWallet).approve(
     V3_SWAP_ROUTER_ADDRESS,
