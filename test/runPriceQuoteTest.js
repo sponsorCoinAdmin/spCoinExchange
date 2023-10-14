@@ -21,8 +21,8 @@ let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL)
 let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug(ethers, CHAIN_ID, provider) : new AlphaRouterService(ethers, CHAIN_ID, provider);
 let erc20Services = new ERC20Services(ethers, provider)
 
-getExactInputStrQuoteTest = async( ) => {
-    console.log("*** EXECUTING getExactInputStrQuoteTest() ******************************");
+getExactInputStrSpCoinToUniQuoteTest = async( ) => {
+    console.log("*** EXECUTING getExactInputStrSpCoinToUniQuoteTest() ******************************");
     let tradeType = TradeType.EXACT_INPUT 
     let tokenInAddr = SPCOIN_ADDRESS;
     let tokenOutAddr = UNI_ADDRESS;
@@ -42,8 +42,8 @@ getExactInputStrQuoteTest = async( ) => {
     console.log("    Quote Exact Input Amount " + exactInputAmount, nameIn + "(" + symbolIn + ") For " + strPriceQuote, nameOut + "(" + symbolOut + ") tokens")
 }
 
-getExactOutputStrQuoteTest = async( ) => {
-    console.log("*** EXECUTING getExactOutputStrQuoteTest() ******************************");
+exactOutputSpCoinToUniStrQuoteTest = async( ) => {
+    console.log("*** EXECUTING exactOutputSpCoinToUniStrQuoteTest() ******************************");
     let tradeType = TradeType.EXACT_OUTPUT 
     let tokenInAddr = SPCOIN_ADDRESS;
     let tokenOutAddr = UNI_ADDRESS;
@@ -63,8 +63,8 @@ getExactOutputStrQuoteTest = async( ) => {
     console.log("    Quote Exact Output Amount " + exactOutputAmount, nameIn + "(" + symbolIn + ") For " + strPriceQuote, nameOut + "(" + symbolOut + ") tokens")
 }
 
-getExactInputRouteQuoteTest = async( ) => {
-    console.log("*** EXECUTING getExactInputRouteQuoteTest() *****************************");
+exactInputSpCoinToUniQuoteTest = async( ) => {
+    console.log("*** EXECUTING exactInputSpCoinToUniQuoteTest() *****************************");
     let tradeType = TradeType.EXACT_INPUT;
     let tokenInAddr = SPCOIN_ADDRESS;
     let tokenOutAddr = UNI_ADDRESS;
@@ -85,8 +85,8 @@ getExactInputRouteQuoteTest = async( ) => {
     console.log("    Quote Exact Input Amount " + exactInputAmount, nameIn + "(" + symbolIn + ") For " + priceQuote, nameOut + "(" + symbolOut + ") tokens")
 }
 
-getExactOutputRouteQuoteTest = async( ) => {
-    console.log("*** EXECUTING getExactOutputRouteQuoteTest() ****************************");
+exactOutputSpCoinToUniQuoteTest = async( ) => {
+    console.log("*** EXECUTING exactOutputSpCoinToUniQuoteTest() ****************************");
     let tradeType = TradeType.EXACT_OUTPUT;
     let tokenInAddr = SPCOIN_ADDRESS;
     let tokenOutAddr = UNI_ADDRESS;
@@ -107,8 +107,8 @@ getExactOutputRouteQuoteTest = async( ) => {
     console.log("    Quote Exact Output Amount " + exactOutputAmount, nameOut + "(" + symbolOut + ") For " + priceQuote, nameIn + "(" + symbolIn + ") tokens")
 }
 
-exeExactInputTransactionTest = async( ) => {
-    console.log("*** EXECUTING exeExactInputTransactionTest() ********************************");
+exactInputWethToUniTransTest = async( ) => {
+    console.log("*** EXECUTING exactInputWethToUniTransTest() ********************************");
 
     let tokenInAddr      = WETH_ADDRESS
     let tokenOutAddr     = UNI_ADDRESS
@@ -130,13 +130,59 @@ exeExactInputTransactionTest = async( ) => {
     return tradeTransaction;
 }
 
-exeExactOutputTransactionTest = async( ) => {
-    console.log("*** EXECUTING exeExactOutputTransactionTest() *******************************");
+exactOutputWethToUniTransTest = async( ) => {
+    console.log("*** EXECUTING exactOutputWethToUniTransTest() *******************************");
 
     let tokenInAddr      = WETH_ADDRESS
     let tokenOutAddr     = SPCOIN_ADDRESS
     let approvalAmount   = ethers.utils.parseUnits('1', 18).toString()
-    let exactOutputAmount = '0.00001'
+    let exactOutputAmount = '0.0000001'
+    let slippagePercent  = 25;
+    let gasLimit         = 1000000
+    
+    tradeTransaction = await ARS.exeExactOutputTransaction(
+      WALLET_ADDRESS,
+      WALLET_SECRET,
+      tokenInAddr,
+      tokenOutAddr,
+      approvalAmount,
+      exactOutputAmount,
+      slippagePercent,
+      gasLimit
+    );
+    return tradeTransaction;
+}
+
+exactInputSpCoinToUniTransTest = async( ) => {
+    console.log("*** EXECUTING exactInputWethToUniTransTest() ********************************");
+
+    let tokenInAddr      = SPCOIN_ADDRESS
+    let tokenOutAddr     = UNI_ADDRESS
+    let approvalAmount   = ethers.utils.parseUnits('1', 18).toString()
+    let exactInputAmount = '0.01'
+    let slippagePercent  = 25;
+    let gasLimit         = 1000000
+
+    tradeTransaction = await ARS.exeExactInputTransaction(
+      WALLET_ADDRESS,
+      WALLET_SECRET,
+      tokenInAddr,
+      tokenOutAddr,
+      approvalAmount,
+      exactInputAmount,
+      slippagePercent,
+      gasLimit
+    );
+    return tradeTransaction;
+}
+
+exactOutputSpCoinToUniTransTest = async( ) => {
+    console.log("*** EXECUTING exactOutputWethToUniTransTest() *******************************");
+
+    let tokenInAddr      = UNI_ADDRESS
+    let tokenOutAddr     = SPCOIN_ADDRESS
+    let approvalAmount   = ethers.utils.parseUnits('1', 18).toString()
+    let exactOutputAmount = '0.0000001'
     let slippagePercent  = 25;
     let gasLimit         = 1000000
     
@@ -154,17 +200,21 @@ exeExactOutputTransactionTest = async( ) => {
 }
 
 main = async( ) => {
-    // await getExactInputStrQuoteTest();
-    // console.log("---------------------------------------------------------------------------------------");
-    // await getExactOutputStrQuoteTest();
-    // console.log("---------------------------------------------------------------------------------------");
-    // await getExactInputRouteQuoteTest();
-    // console.log("---------------------------------------------------------------------------------------");
-    // await getExactOutputRouteQuoteTest();
-    // console.log("---------------------------------------------------------------------------------------");
-    await exeExactInputTransactionTest();
+    await getExactInputStrSpCoinToUniQuoteTest();
     console.log("---------------------------------------------------------------------------------------");
-    await exeExactOutputTransactionTest();
+    await exactOutputSpCoinToUniStrQuoteTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exactInputSpCoinToUniQuoteTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exactOutputSpCoinToUniQuoteTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exactInputWethToUniTransTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exactOutputWethToUniTransTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exactInputSpCoinToUniTransTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exactOutputSpCoinToUniTransTest();
     console.log("---------------------------------------------------------------------------------------");
     console.log("FINISHED EXITING")
 }
