@@ -5,7 +5,7 @@ const { ethers } = require('ethers')
 const { TradeType } = require('@uniswap/sdk-core')
 
 const { AlphaRouterServiceDebug } = require('../lib/debug/AlphaRouterServiceDebug')
-const { AlphaRouterService } = require('../lib/prod/AlphaRouterService');
+const { AlphaRouterService, ERC20Services } = require('../lib/prod/AlphaRouterService');
 
 const GOERLI_INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
 const CHAIN_ID = parseInt(process.env.GOERLI_CHAIN_ID)
@@ -19,6 +19,7 @@ const UNI_ADDRESS = process.env.GOERLI_UNI
 
 let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL)
 let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug(ethers, CHAIN_ID, provider) : new AlphaRouterService(ethers, CHAIN_ID, provider);
+let erc20Services = new ERC20Services(ethers, provider)
 
 getExactInputStrQuoteTest = async( ) => {
     console.log("*** EXECUTING getExactInputStrQuoteTest() ******************************");
@@ -26,10 +27,19 @@ getExactInputStrQuoteTest = async( ) => {
     let tokenInAddr = SPCOIN_ADDRESS;
     let tokenOutAddr = UNI_ADDRESS;
     let slippagePercent = 25;
-    let tokenAmountIn = '0.01';
+    let exactInputAmount = '0.01';
     let printDecimals = 12
-    strPriceQuote = await ARS.getStrPriceQuote( tradeType, tokenInAddr, tokenOutAddr, tokenAmountIn, slippagePercent, printDecimals)
-    console.log("*** getExactInputStrQuoteTest with Fees:", strPriceQuote);
+    let strPriceQuote = await ARS.getStrPriceQuote( tradeType, tokenInAddr, tokenOutAddr, exactInputAmount, slippagePercent, printDecimals)
+
+    let contractIn = erc20Services.getERC20Contract(tokenInAddr)
+    let nameIn = await erc20Services.getContractName(contractIn);
+    let symbolIn = await erc20Services.getContractSymbol(contractIn);
+
+    let contractOut = erc20Services.getERC20Contract(tokenOutAddr)
+    let nameOut = await erc20Services.getContractName(contractOut);
+    let symbolOut = await erc20Services.getContractSymbol(contractOut);
+
+    console.log("    Quote Exact Input Amount " + exactInputAmount, nameIn + "(" + symbolIn + ") For " + strPriceQuote, nameOut + "(" + symbolOut + ") tokens")
 }
 
 getExactOutputStrQuoteTest = async( ) => {
@@ -38,33 +48,63 @@ getExactOutputStrQuoteTest = async( ) => {
     let tokenInAddr = SPCOIN_ADDRESS;
     let tokenOutAddr = UNI_ADDRESS;
     let slippagePercent = 25;
-    let tokenAmountIn = '0.01';
+    let exactOutputAmount = '0.01';
     let printDecimals = 12
-    strPriceQuote = await ARS.getStrPriceQuote( tradeType, tokenInAddr, tokenOutAddr, tokenAmountIn, slippagePercent, printDecimals)
-    console.log("*** getExactOutputStrQuoteTest with Fees:", strPriceQuote);
+    let strPriceQuote = await ARS.getStrPriceQuote( tradeType, tokenInAddr, tokenOutAddr, exactOutputAmount, slippagePercent, printDecimals)
+ 
+    let contractIn = erc20Services.getERC20Contract(tokenInAddr)
+    let nameIn = await erc20Services.getContractName(contractIn);
+    let symbolIn = await erc20Services.getContractSymbol(contractIn);
+
+    let contractOut = erc20Services.getERC20Contract(tokenOutAddr)
+    let nameOut = await erc20Services.getContractName(contractOut);
+    let symbolOut = await erc20Services.getContractSymbol(contractOut);
+
+    console.log("    Quote Exact Output Amount " + exactOutputAmount, nameIn + "(" + symbolIn + ") For " + strPriceQuote, nameOut + "(" + symbolOut + ") tokens")
 }
 
 getExactInputRouteQuoteTest = async( ) => {
+    console.log("*** EXECUTING getExactInputRouteQuoteTest() *****************************");
     let tradeType = TradeType.EXACT_INPUT;
     let tokenInAddr = SPCOIN_ADDRESS;
     let tokenOutAddr = UNI_ADDRESS;
-    let tokenAmountInWei = 100;
+    let exactInputAmount = '0.01';
     let slippagePercent = 25;
-    let printDecimals = 12
-    let route = await ARS.getStrPriceQuote( tradeType, tokenInAddr, tokenOutAddr, tokenAmountInWei, slippagePercent, printDecimals)
+    let route = await ARS.getRoute( tradeType, WALLET_ADDRESS, tokenInAddr, tokenOutAddr, exactInputAmount, slippagePercent)
     let quote = route.quote
-    // console.log("getExactInputRouteQuoteTest SPCOIN to WETH:", quote.toFixed(10))
+    let priceQuote = quote.toFixed(10)
+
+    let contractIn = erc20Services.getERC20Contract(tokenInAddr)
+    let nameIn = await erc20Services.getContractName(contractIn);
+    let symbolIn = await erc20Services.getContractSymbol(contractIn);
+
+    let contractOut = erc20Services.getERC20Contract(tokenOutAddr)
+    let nameOut = await erc20Services.getContractName(contractOut);
+    let symbolOut = await erc20Services.getContractSymbol(contractOut);
+
+    console.log("    Quote Exact Input Amount " + exactInputAmount, nameIn + "(" + symbolIn + ") For " + priceQuote, nameOut + "(" + symbolOut + ") tokens")
 }
 
 getExactOutputRouteQuoteTest = async( ) => {
+    console.log("*** EXECUTING getExactOutputRouteQuoteTest() ****************************");
     let tradeType = TradeType.EXACT_OUTPUT;
     let tokenInAddr = SPCOIN_ADDRESS;
     let tokenOutAddr = UNI_ADDRESS;
-    let tokenAmountIn = '0.01';
+    let exactOutputAmount = '0.01';
     let slippagePercent = 25;
-    let route = await ARS.getRoute( tradeType, WALLET_ADDRESS, tokenInAddr, tokenOutAddr, tokenAmountIn, slippagePercent)
+    let route = await ARS.getRoute( tradeType, WALLET_ADDRESS, tokenInAddr, tokenOutAddr, exactOutputAmount, slippagePercent)
     let quote = route.quote
-    console.log("getExactOutputRouteQuoteTest SPCOIN to WETH:", quote.toFixed(10))
+    let priceQuote = quote.toFixed(10)
+
+    let contractIn = erc20Services.getERC20Contract(tokenInAddr)
+    let nameIn = await erc20Services.getContractName(contractIn);
+    let symbolIn = await erc20Services.getContractSymbol(contractIn);
+
+    let contractOut = erc20Services.getERC20Contract(tokenOutAddr)
+    let nameOut = await erc20Services.getContractName(contractOut);
+    let symbolOut = await erc20Services.getContractSymbol(contractOut);
+
+    console.log("    Quote Exact Output Amount " + exactOutputAmount, nameOut + "(" + symbolOut + ") For " + priceQuote, nameIn + "(" + symbolIn + ") tokens")
 }
 
 exeExactInputTransactionTest = async( ) => {
@@ -73,7 +113,7 @@ exeExactInputTransactionTest = async( ) => {
     let tokenInAddr      = WETH_ADDRESS
     let tokenOutAddr     = UNI_ADDRESS
     let approvalAmount   = ethers.utils.parseUnits('1', 18).toString()
-    let inputTokenAmount = '0.01'
+    let exactInputAmount = '0.01'
     let slippagePercent  = 25;
     let gasLimit         = 1000000
 
@@ -83,7 +123,7 @@ exeExactInputTransactionTest = async( ) => {
       tokenInAddr,
       tokenOutAddr,
       approvalAmount,
-      inputTokenAmount,
+      exactInputAmount,
       slippagePercent,
       gasLimit
     );
@@ -96,7 +136,7 @@ exeExactOutputTransactionTest = async( ) => {
     let tokenInAddr      = WETH_ADDRESS
     let tokenOutAddr     = SPCOIN_ADDRESS
     let approvalAmount   = ethers.utils.parseUnits('1', 18).toString()
-    let inputTokenAmount = '0.01'
+    let exactOutputAmount = '0.00001'
     let slippagePercent  = 25;
     let gasLimit         = 1000000
     
@@ -106,7 +146,7 @@ exeExactOutputTransactionTest = async( ) => {
       tokenInAddr,
       tokenOutAddr,
       approvalAmount,
-      inputTokenAmount,
+      exactOutputAmount,
       slippagePercent,
       gasLimit
     );
@@ -114,13 +154,18 @@ exeExactOutputTransactionTest = async( ) => {
 }
 
 main = async( ) => {
-    await getExactInputStrQuoteTest();
-    await getExactOutputStrQuoteTest();
-    console.log("*** EXECUTING getExactInputRouteQuoteTest() *****************************");
-    await getExactInputRouteQuoteTest();
-    console.log("*** EXECUTING getExactOutputRouteQuoteTest() *****************************");
-    await getExactInputRouteQuoteTest();
+    // await getExactInputStrQuoteTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    // await getExactOutputStrQuoteTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    // await getExactInputRouteQuoteTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    // await getExactOutputRouteQuoteTest();
+    // console.log("---------------------------------------------------------------------------------------");
     await exeExactInputTransactionTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exeExactOutputTransactionTest();
+    console.log("---------------------------------------------------------------------------------------");
     console.log("FINISHED EXITING")
 }
 

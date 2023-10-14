@@ -25,11 +25,4 @@ async function main(
   return quoteAmount
 }
 
-main(
-  baseToken,
-  quoteToken,
-  1,
-  257109,
-  8,
-  18,
-)
+main( baseToken, quoteToken, 1, 257109, 8, 18 )
