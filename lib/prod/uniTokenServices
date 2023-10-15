@@ -14,6 +14,16 @@ class UniTokenServices {
         this.provider = provider;
     }
 
+      // Deposit a specified account of ETH to WETH
+  async depositEthToWeth(wethContract, _ethAmountInWei) {
+    await wethContract.connect(this.signerAccount).deposit({ value: _ethAmountInWei });
+  }
+
+  async withdrawEthFromWeth(wethContract, _wethAmountInWei) {
+    await wethContract.connect(this.signerAccount).withdraw( _wethAmountInWei );
+  }
+
+
     wrapAddrToUniToken = async (_tokenAddress) => {
         // console.log( " EXECUTING wrapUniToken(", _tokenAddress, ")" );
         let ecr20Contract      = this.getERC20Contract(_tokenAddress)

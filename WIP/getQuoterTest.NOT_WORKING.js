@@ -20,8 +20,6 @@ const fee = '3000';
 const amountIn = parseEther('1');
 const sqrtPriceLimitX96 = '0';
 
-// const { getSpCoinExchange } = require("./deployHHConnection");
-
 const quoter = {
     QUOTER_ADDRESS,
     QuoterAbi,
