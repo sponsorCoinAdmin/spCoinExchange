@@ -199,22 +199,48 @@ exactOutputSpCoinToUniTransTest = async( ) => {
     return tradeTransaction;
 }
 
+exactInputSpCoinToUniTransTestNew = async( ) => {
+    console.log("*** EXECUTING exactInputSpCoinToUniTransTestNew() ********************************");
+
+    let tokenInAddr      = SPCOIN_ADDRESS
+    let tokenOutAddr     = UNI_ADDRESS
+    let approvalAmount   = ethers.utils.parseUnits('1', 18).toString()
+    let exactInputAmount = '0.01'
+    let slippagePercent  = 25;
+    let gasLimit         = 1000000
+
+    tradeTransaction = await ARS.exeExactInputTransaction(
+      WALLET_ADDRESS,
+      WALLET_SECRET,
+      tokenInAddr,
+      tokenOutAddr,
+      approvalAmount,
+      exactInputAmount,
+      slippagePercent,
+      gasLimit
+    );
+    return tradeTransaction;
+}
+
+
 main = async( ) => {
-    await getExactInputStrSpCoinToUniQuoteTest();
-    console.log("---------------------------------------------------------------------------------------");
-    await exactOutputSpCoinToUniStrQuoteTest();
-    console.log("---------------------------------------------------------------------------------------");
-    await exactInputSpCoinToUniQuoteTest();
-    console.log("---------------------------------------------------------------------------------------");
-    await exactOutputSpCoinToUniQuoteTest();
-    console.log("---------------------------------------------------------------------------------------");
-    await exactInputWethToUniTransTest();
-    console.log("---------------------------------------------------------------------------------------");
-    await exactOutputWethToUniTransTest();
-    console.log("---------------------------------------------------------------------------------------");
-    await exactInputSpCoinToUniTransTest();
-    console.log("---------------------------------------------------------------------------------------");
-    await exactOutputSpCoinToUniTransTest();
+    // await getExactInputStrSpCoinToUniQuoteTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    // await exactOutputSpCoinToUniStrQuoteTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    // await exactInputSpCoinToUniQuoteTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    // await exactOutputSpCoinToUniQuoteTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    // await exactInputWethToUniTransTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    // await exactOutputWethToUniTransTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    // await exactInputSpCoinToUniTransTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    // await exactOutputSpCoinToUniTransTest();
+    // console.log("---------------------------------------------------------------------------------------");
+    await exactInputSpCoinToUniTransTestNEW();
     console.log("---------------------------------------------------------------------------------------");
     console.log("FINISHED EXITING")
 }
