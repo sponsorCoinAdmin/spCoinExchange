@@ -1,5 +1,5 @@
 require("dotenv").config();
-let DEBUG_MODE = false;
+let DEBUG_MODE = true;
 
 const { ethers } = require('ethers')
 const { TradeType } = require('@uniswap/sdk-core')
@@ -171,7 +171,7 @@ exactOutputWethToUniTransTest = async( _wallet ) => {
 }
 
 exactInputSpCoinToUniTransTest = async( _wallet ) => {
-    console.log("*** EXECUTING exactInputWethToUniTransTest() ********************************");
+    console.log("*** EXECUTING exactInputSpCoinToUniTransTest() ********************************");
 
     let tokenInAddr      = SPCOIN_ADDRESS
     let tokenOutAddr     = UNI_ADDRESS
