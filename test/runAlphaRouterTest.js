@@ -223,7 +223,7 @@ getExactInputTestRoute = async( _wallet ) => {
 exactInputSpCoinToUniTransTest = async( _wallet, _route ) => {
     console.log("*** EXECUTING exactOutputWethToUniTransTest() *******************************");
 
-    exeRouteTransaction = await ( _wallet, 
+    exeWalletTransactionRoute = await ( _wallet, 
         _approvalAmount,
         _recipientAddress,
         _tokenAddrIn,
