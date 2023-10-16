@@ -20,7 +20,7 @@ const UNI_ADDRESS = process.env.GOERLI_UNI
 let erc20Services = new ERC20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
 // let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL)
 let provider = erc20Services.provider
-let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug(ethers, CHAIN_ID, provider, erc20Services) : new AlphaRouterService( erc20Services );
+let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug( erc20Services ) : new AlphaRouterService( erc20Services );
 
 getExactInputStrSpCoinToUniQuoteTest = async( _wallet ) => {
     console.log("*** EXECUTING getExactInputStrSpCoinToUniQuoteTest() ******************************");
@@ -30,7 +30,13 @@ getExactInputStrSpCoinToUniQuoteTest = async( _wallet ) => {
     let slippagePercent = 25;
     let exactInputAmount = '0.01';
     let printDecimals = 12
-    let strPriceQuote = await ARS.getStrPriceQuote( tradeType, tokenInAddr, tokenOutAddr, exactInputAmount, slippagePercent, printDecimals)
+    let strPriceQuote = await ARS.getStrPriceQuote(
+            tradeType,
+            tokenInAddr,
+            tokenOutAddr,
+            exactInputAmount,
+            slippagePercent,
+            printDecimals)
 
     let contractIn = erc20Services.getERC20Contract(tokenInAddr)
     let nameIn = await erc20Services.getContractName(contractIn);
@@ -51,7 +57,13 @@ exactOutputSpCoinToUniStrQuoteTest = async( _wallet ) => {
     let slippagePercent = 25;
     let exactOutputAmount = '0.01';
     let printDecimals = 12
-    let strPriceQuote = await ARS.getStrPriceQuote( tradeType, tokenInAddr, tokenOutAddr, exactOutputAmount, slippagePercent, printDecimals)
+    let strPriceQuote = await ARS.getStrPriceQuote(
+            tradeType, 
+            tokenInAddr, 
+            tokenOutAddr, 
+            exactOutputAmount, 
+            slippagePercent, 
+            printDecimals)
  
     let contractIn = erc20Services.getERC20Contract(tokenInAddr)
     let nameIn = await erc20Services.getContractName(contractIn);
@@ -71,7 +83,13 @@ exactInputSpCoinToUniQuoteTest = async( _wallet ) => {
     let tokenOutAddr = UNI_ADDRESS;
     let exactInputAmount = '0.01';
     let slippagePercent = 25;
-    let route = await ARS.getRoute( tradeType, WALLET_ADDRESS, tokenInAddr, tokenOutAddr, exactInputAmount, slippagePercent)
+    let route = await ARS.getRoute(
+                        tradeType,
+                        WALLET_ADDRESS,
+                        tokenInAddr,
+                        tokenOutAddr,
+                        exactInputAmount,
+                        slippagePercent)
     let quote = route.quote
     let priceQuote = quote.toFixed(10)
 
@@ -93,7 +111,13 @@ exactOutputSpCoinToUniQuoteTest = async( _wallet ) => {
     let tokenOutAddr = UNI_ADDRESS;
     let exactOutputAmount = '0.01';
     let slippagePercent = 25;
-    let route = await ARS.getRoute( tradeType, WALLET_ADDRESS, tokenInAddr, tokenOutAddr, exactOutputAmount, slippagePercent)
+    let route = await ARS.getRoute(
+            tradeType, 
+            WALLET_ADDRESS, 
+            tokenInAddr, 
+            tokenOutAddr, 
+            exactOutputAmount, 
+            slippagePercent)
     let quote = route.quote
     let priceQuote = quote.toFixed(10)
 
@@ -119,15 +143,14 @@ exactInputWethToUniTransTest = async( _wallet ) => {
     let gasLimit         = 1000000
 
     tradeTransaction = await ARS.exeExactInputTransaction(
-      WALLET_ADDRESS,
-      WALLET_SECRET,
-      tokenInAddr,
-      tokenOutAddr,
-      approvalAmount,
-      exactInputAmount,
-      slippagePercent,
-      gasLimit
-    );
+            _wallet,
+            tokenInAddr,
+            tokenOutAddr,
+            approvalAmount,
+            exactInputAmount,
+            slippagePercent,
+            gasLimit
+       );
     return tradeTransaction;
 }
 
@@ -142,14 +165,14 @@ exactOutputWethToUniTransTest = async( _wallet ) => {
     let gasLimit         = 1000000
     
     tradeTransaction = await ARS.exeExactOutputTransaction(
-      WALLET_ADDRESS,
-      WALLET_SECRET,
-      tokenInAddr,
-      tokenOutAddr,
-      approvalAmount,
-      exactOutputAmount,
-      slippagePercent,
-      gasLimit
+        WALLET_ADDRESS,
+        WALLET_SECRET,
+        tokenInAddr,
+        tokenOutAddr,
+        approvalAmount,
+        exactOutputAmount,
+        slippagePercent,
+        gasLimit
     );
     return tradeTransaction;
 }
@@ -165,14 +188,13 @@ exactInputSpCoinToUniTransTest = async( _wallet ) => {
     let gasLimit         = 1000000
 
     tradeTransaction = await ARS.exeExactInputTransaction(
-      WALLET_ADDRESS,
-      WALLET_SECRET,
-      tokenInAddr,
-      tokenOutAddr,
-      approvalAmount,
-      exactInputAmount,
-      slippagePercent,
-      gasLimit
+        _wallet,
+        tokenInAddr,
+        tokenOutAddr,
+        approvalAmount,
+        exactInputAmount,
+        slippagePercent,
+        gasLimit
     );
     return tradeTransaction;
 }
@@ -188,14 +210,14 @@ exactOutputSpCoinToUniTransTest = async( _wallet ) => {
     let gasLimit         = 1000000
     
     tradeTransaction = await ARS.exeExactOutputTransaction(
-      WALLET_ADDRESS,
-      WALLET_SECRET,
-      tokenInAddr,
-      tokenOutAddr,
-      approvalAmount,
-      exactOutputAmount,
-      slippagePercent,
-      gasLimit
+        WALLET_ADDRESS,
+        WALLET_SECRET,
+        tokenInAddr,
+        tokenOutAddr,
+        approvalAmount,
+        exactOutputAmount,
+        slippagePercent,
+        gasLimit
     );
     return tradeTransaction;
 }
@@ -211,15 +233,13 @@ exactInputSpCoinToUniTransTestNew = async( _wallet ) => {
     let gasLimit         = 1000000
 
     tradeTransaction = await ARS.exeExactInputTransaction(
-      _wallet,
-      WALLET_ADDRESS,
-      WALLET_SECRET,
-      tokenInAddr,
-      tokenOutAddr,
-      approvalAmount,
-      exactInputAmount,
-      slippagePercent,
-      gasLimit
+        _wallet,
+        tokenInAddr,
+        tokenOutAddr,
+        approvalAmount,
+        exactInputAmount,
+        slippagePercent,
+        gasLimit
     );
     return tradeTransaction;
 }
@@ -235,12 +255,12 @@ main = async( ) => {
     // console.log("---------------------------------------------------------------------------------------");
     // await exactOutputSpCoinToUniQuoteTest(wallet);
     // console.log("---------------------------------------------------------------------------------------");
-    // await exactInputWethToUniTransTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
+    await exactInputWethToUniTransTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
     // await exactOutputWethToUniTransTest(wallet);
     // console.log("---------------------------------------------------------------------------------------");
-    // await exactInputSpCoinToUniTransTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
+    await exactInputSpCoinToUniTransTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
     // await exactOutputSpCoinToUniTransTest(wallet);
     // console.log("---------------------------------------------------------------------------------------");
     await exactInputSpCoinToUniTransTestNew(wallet);
