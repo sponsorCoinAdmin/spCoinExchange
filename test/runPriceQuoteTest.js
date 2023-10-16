@@ -253,8 +253,8 @@ main = async( ) => {
     // console.log("---------------------------------------------------------------------------------------");
     // await exactInputSpCoinToUniTransTest(wallet);
     // console.log("---------------------------------------------------------------------------------------");
-    // await exactOutputSpCoinToUniTransTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
+    await exactOutputSpCoinToUniTransTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
     await exactInputSpCoinToUniTransTestNew(wallet);
     console.log("---------------------------------------------------------------------------------------");
     console.log("FINISHED EXITING")
