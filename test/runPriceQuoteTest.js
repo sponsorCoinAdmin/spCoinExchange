@@ -17,9 +17,10 @@ const WETH_ADDRESS = process.env.GOERLI_WETH
 const SPCOIN_ADDRESS = process.env.GOERLI_SPCOIN
 const UNI_ADDRESS = process.env.GOERLI_UNI
 
-let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL)
+let erc20Services = new ERC20Services(ethers, GOERLI_INFURA_TEST_URL)
+// let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL)
+let provider = erc20Services.provider
 let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug(ethers, CHAIN_ID, provider) : new AlphaRouterService(ethers, CHAIN_ID, provider);
-let erc20Services = new ERC20Services(ethers, provider)
 
 getExactInputStrSpCoinToUniQuoteTest = async( _wallet ) => {
     console.log("*** EXECUTING getExactInputStrSpCoinToUniQuoteTest() ******************************");
