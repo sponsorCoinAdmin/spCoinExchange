@@ -22,8 +22,8 @@ let erc20Services = new ERC20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
 let provider = erc20Services.provider
 let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug( erc20Services ) : new AlphaRouterService( erc20Services );
 
-getExactInputStrSpCoinToUniQuoteTest = async( _wallet ) => {
-    console.log("*** EXECUTING getExactInputStrSpCoinToUniQuoteTest() ******************************");
+getExactInputSpCoinToUniStrQuoteTest = async( _wallet ) => {
+    console.log("*** EXECUTING getExactInputSpCoinToUniStrQuoteTest() ******************************");
     let tradeType = TradeType.EXACT_INPUT 
     let tokenInAddr = SPCOIN_ADDRESS;
     let tokenOutAddr = UNI_ADDRESS;
@@ -85,7 +85,7 @@ exactInputSpCoinToUniQuoteTest = async( _wallet ) => {
     let slippagePercent = 25;
     let route = await ARS.getRoute(
                         tradeType,
-                        WALLET_ADDRESS,
+                        _wallet.address,
                         tokenInAddr,
                         tokenOutAddr,
                         exactInputAmount,
@@ -113,7 +113,7 @@ exactOutputSpCoinToUniQuoteTest = async( _wallet ) => {
     let slippagePercent = 25;
     let route = await ARS.getRoute(
             tradeType, 
-            WALLET_ADDRESS, 
+            _wallet.address, 
             tokenInAddr, 
             tokenOutAddr, 
             exactOutputAmount, 
@@ -165,8 +165,7 @@ exactOutputWethToUniTransTest = async( _wallet ) => {
     let gasLimit         = 1000000
     
     tradeTransaction = await ARS.exeExactOutputTransaction(
-        WALLET_ADDRESS,
-        WALLET_SECRET,
+        _wallet,
         tokenInAddr,
         tokenOutAddr,
         approvalAmount,
@@ -210,8 +209,7 @@ exactOutputSpCoinToUniTransTest = async( _wallet ) => {
     let gasLimit         = 1000000
     
     tradeTransaction = await ARS.exeExactOutputTransaction(
-        WALLET_ADDRESS,
-        WALLET_SECRET,
+        _wallet,
         tokenInAddr,
         tokenOutAddr,
         approvalAmount,
@@ -247,22 +245,22 @@ exactInputSpCoinToUniTransTestNew = async( _wallet ) => {
 main = async( ) => {
     let wallet = erc20Services.wallet(WALLET_SECRET)
 
-    // await getExactInputStrSpCoinToUniQuoteTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
-    // await exactOutputSpCoinToUniStrQuoteTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
-    // await exactInputSpCoinToUniQuoteTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
-    // await exactOutputSpCoinToUniQuoteTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
+    await getExactInputSpCoinToUniStrQuoteTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
+    await exactOutputSpCoinToUniStrQuoteTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
+    await exactInputSpCoinToUniQuoteTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
+    await exactOutputSpCoinToUniQuoteTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
     await exactInputWethToUniTransTest(wallet);
     console.log("---------------------------------------------------------------------------------------");
-    // await exactOutputWethToUniTransTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
+    await exactOutputWethToUniTransTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
     await exactInputSpCoinToUniTransTest(wallet);
     console.log("---------------------------------------------------------------------------------------");
-    // await exactOutputSpCoinToUniTransTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
+    await exactOutputSpCoinToUniTransTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
     await exactInputSpCoinToUniTransTestNew(wallet);
     console.log("---------------------------------------------------------------------------------------");
     console.log("FINISHED EXITING")
