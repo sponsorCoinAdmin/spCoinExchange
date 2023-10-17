@@ -1,5 +1,5 @@
 require("dotenv").config();
-let DEBUG_MODE = true;
+let DEBUG_MODE = false;
 
 const { ethers } = require('ethers')
 const { TradeType } = require('@uniswap/sdk-core')
@@ -158,7 +158,7 @@ exactOutputWethToUniTransTest = async( _wallet ) => {
     let slippagePercent  = 25;
     let gasLimit         = 1000000
     
-    tradeTransaction = await this.exeExactOutputTransaction(
+    tradeTransaction = await ARS.exeExactOutputTransaction(
         _wallet,
         tokenInAddr,
         tokenOutAddr,
@@ -239,20 +239,20 @@ exactInputSpCoinToUniTransTestNew = async( _wallet ) => {
 main = async( ) => {
     let wallet = erc20Services.wallet(WALLET_SECRET)
 
-    // await getExactInputSpCoinToUniStrQuoteTest();
-    // console.log("---------------------------------------------------------------------------------------");
-    // await exactOutputSpCoinToUniStrQuoteTest();
-    // console.log("---------------------------------------------------------------------------------------");
-    // await exactInputSpCoinToUniQuoteTest();
-    // console.log("---------------------------------------------------------------------------------------");
-    // await exactOutputSpCoinToUniQuoteTest();
-    // console.log("---------------------------------------------------------------------------------------");
-    // await exactInputWethToUniTransTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
-    // await exactOutputWethToUniTransTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
-    // await exactInputSpCoinToUniTransTest(wallet);
-    // console.log("---------------------------------------------------------------------------------------");
+    await getExactInputSpCoinToUniStrQuoteTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exactOutputSpCoinToUniStrQuoteTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exactInputSpCoinToUniQuoteTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exactOutputSpCoinToUniQuoteTest();
+    console.log("---------------------------------------------------------------------------------------");
+    await exactInputWethToUniTransTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
+    await exactOutputWethToUniTransTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
+    await exactInputSpCoinToUniTransTest(wallet);
+    console.log("---------------------------------------------------------------------------------------");
     await exactOutputSpCoinToUniTransTest(wallet);
     console.log("---------------------------------------------------------------------------------------");
     await exactInputSpCoinToUniTransTestNew(wallet);

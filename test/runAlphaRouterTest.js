@@ -1,5 +1,5 @@
 require("dotenv").config();
-let DEBUG_MODE = false;
+let DEBUG_MODE = true;
 
 const { ethers } = require('ethers')
 const { TradeType } = require('@uniswap/sdk-core')
@@ -193,21 +193,17 @@ exactInputSpCoinToUniTransTest = async( _wallet ) => {
 }
 
 
-
-
 //  NEW CODING
 
 getExactInputTestRoute = async( _wallet ) => {
-    console.log("*** EXECUTING exactInputSpCoinToUniTransTestNew() ********************************");
+    console.log("getExactInputTestRoute( wallet:", _wallet.address, ")");
 
     let recipientAddr   = _wallet.address
     let tradeType        = TradeType.EXACT_INPUT
     let tokenInAddr      = SPCOIN_ADDRESS
     let tokenOutAddr     = UNI_ADDRESS
-    let approvalAmount   = ethers.utils.parseUnits('1', 18).toString()
     let exactInputAmount = '0.01'
     let slippagePercent  = 25;
-    let gasLimit         = 1000000
 
     let route = await ARS.getRoute(
         recipientAddr,
@@ -220,21 +216,22 @@ getExactInputTestRoute = async( _wallet ) => {
     return route;
 }
 
-exactInputSpCoinToUniTransTest = async( _wallet, _route ) => {
-    console.log("*** EXECUTING exactOutputWethToUniTransTest() *******************************");
+exactInputSpCoinToUniTransTest = async( walletPvtKey) => {
+    console.log("exactOutputWethToUniTransTest( WALLET_SECRET )");
 
-    exeWalletTransactionRoute = await ( _wallet, 
-        _approvalAmount,
-        _recipientAddress,
-        _tokenAddrIn,
-        _route,
-        _gasLimit)
+    let wallet = erc20Services.wallet( walletPvtKey )
+    let exactInputTestRoute = await getExactInputTestRoute ( wallet )
+    let gasLimit         = 1000000
+
+    await ARS.execTransaction(
+        wallet,
+        exactInputTestRoute,
+        gasLimit
+    )
 }
 
 main = async( ) => {
-    let wallet = erc20Services.wallet(WALLET_SECRET)
-    let exactInputTestRoute = await getExactInputTestRoute (wallet, exactInputTestRoute)
-    exactInputSpCoinToUniTransTest( exactInputTestRoute )
+    await exactInputSpCoinToUniTransTest( WALLET_SECRET )
     
 
     // await exactInputSpCoinToUniTransTestNew(wallet);
