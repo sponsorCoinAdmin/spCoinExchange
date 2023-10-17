@@ -44,7 +44,7 @@ getExactInputSpCoinToUniStrQuoteTest = async( ) => {
     let nameOut = await erc20Services.getContractName(contractOut);
     let symbolOut = await erc20Services.getContractSymbol(contractOut);
 
-    console.log("    Quote Exact Input Amount " + exactInputAmount, nameIn + "(" + symbolIn + ") For " + strPriceQuote, nameOut + "(" + symbolOut + ") tokens")
+    console.log("    Quote Exact Input Swap Amount " + exactInputAmount, nameIn + "(" + symbolIn + ") For " + strPriceQuote, nameOut + "(" + symbolOut + ") tokens")
 }
 
 exactOutputSpCoinToUniStrQuoteTest = async( ) => {
@@ -71,7 +71,7 @@ exactOutputSpCoinToUniStrQuoteTest = async( ) => {
     let nameOut = await erc20Services.getContractName(contractOut);
     let symbolOut = await erc20Services.getContractSymbol(contractOut);
 
-    console.log("    Quote Exact Output Amount " + exactOutputAmount, nameIn + "(" + symbolIn + ") For " + strPriceQuote, nameOut + "(" + symbolOut + ") tokens")
+    console.log("    Quote Exact Output Swap Amount " + exactOutputAmount, nameIn + "(" + symbolIn + ") For " + strPriceQuote, nameOut + "(" + symbolOut + ") tokens")
 }
 
 exactInputSpCoinToUniQuoteTest = async( ) => {
@@ -97,7 +97,7 @@ exactInputSpCoinToUniQuoteTest = async( ) => {
     let nameOut = await erc20Services.getContractName(contractOut);
     let symbolOut = await erc20Services.getContractSymbol(contractOut);
 
-    console.log("    Quote Exact Input Amount " + exactInputAmount, nameIn + "(" + symbolIn + ") For " + priceQuote, nameOut + "(" + symbolOut + ") tokens")
+    console.log("    Quote Exact Input Swap Amount " + exactInputAmount, nameIn + "(" + symbolIn + ") For " + priceQuote, nameOut + "(" + symbolOut + ") tokens")
 }
 
 exactOutputSpCoinToUniQuoteTest = async( ) => {
@@ -123,12 +123,11 @@ exactOutputSpCoinToUniQuoteTest = async( ) => {
     let nameOut = await erc20Services.getContractName(contractOut);
     let symbolOut = await erc20Services.getContractSymbol(contractOut);
 
-    console.log("    Quote Exact Output Amount " + exactOutputAmount, nameOut + "(" + symbolOut + ") For " + priceQuote, nameIn + "(" + symbolIn + ") tokens")
+    console.log("    Quote Exact Output Swap Amount " + exactOutputAmount, nameOut + "(" + symbolOut + ") For " + priceQuote, nameIn + "(" + symbolIn + ") tokens")
 }
 
 exactInputWethToUniTransTest = async( _wallet ) => {
     console.log("*** EXECUTING exactInputWethToUniTransTest() ********************************");
-
     let tokenInAddr      = WETH_ADDRESS
     let tokenOutAddr     = UNI_ADDRESS
     let approvalAmount   = ethers.utils.parseUnits('1', 18).toString()
