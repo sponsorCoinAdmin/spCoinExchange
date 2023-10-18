@@ -17,7 +17,7 @@ const UNI_ADDRESS = process.env.GOERLI_UNI
 
 let erc20Services = new ERC20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
 // let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL)
-let provider = erc20Services.provider
+// let provider = erc20Services.provider
 let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug( erc20Services ) : new AlphaRouterService( erc20Services );
 
 getExactInputSpCoinToUniStrQuoteTest = async( ) => {
