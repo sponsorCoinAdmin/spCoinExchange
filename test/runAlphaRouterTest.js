@@ -197,12 +197,12 @@ exactOutputWethToUniTransTest = async( ) => {
 }
 
 main = async( ) => {
-    // await exactInputSpCoinToUniTransTest( )
-    // console.log("------------------------------------------------------------------------------------------------")
-    // await exactOutputSpCoinToUniTransTest( )
-    // console.log("------------------------------------------------------------------------------------------------")
-    // await exactInputWethToUniTransTest( )
-    // console.log("------------------------------------------------------------------------------------------------")
+    await exactInputSpCoinToUniTransTest( )
+    console.log("------------------------------------------------------------------------------------------------")
+    await exactOutputSpCoinToUniTransTest( )
+    console.log("------------------------------------------------------------------------------------------------")
+    await exactInputWethToUniTransTest( )
+    console.log("------------------------------------------------------------------------------------------------")
     await exactOutputWethToUniTransTest( )
     console.log("------------------------------------------------------------------------------------------------")
 
