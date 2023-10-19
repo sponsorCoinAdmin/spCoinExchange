@@ -1,84 +1,53 @@
 require("dotenv").config();
-let DEBUG_MODE = true;
 
 const { ethers } = require('ethers')
-const { AlphaRouterServiceDebug } = require('../lib/debug/AlphaRouterServiceDebug')
-const { AlphaRouterService, ERC20Services } = require('../lib/prod/AlphaRouterService');
-const { Token : UniToken, CurrencyAmount } = require('@uniswap/sdk-core')
-
+const { ERC20Services, LogERC20Services } = require('../lib/prod/logErc20Services');
 
 const GOERLI_INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
 const CHAIN_ID = parseInt(process.env.GOERLI_CHAIN_ID)
 const WALLET_SECRET = process.env.WALLET_SECRET
 const WETH_ADDRESS = process.env.GOERLI_WETH
-const UNI_ADDRESS = process.env.GOERLI_UNI
 
 let erc20Services = new ERC20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
-// let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL)
-// let provider = erc20Services.provider
-let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug( erc20Services ) : new AlphaRouterService( erc20Services );
+let logErc20Services = new LogERC20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
 
-tokenAmountToWeiTest = ( _number, _decimals ) => {
-    let wei = erc20Services.tokenToBigIntAmt( _number, _decimals )
-    console.log(`tokenAmountToWeiTest: ${_number} token(s) equals ${ wei.toString()} wei`);
+wrapEthAmtByAddressTest = async(_wallet, _wethAddress, _ethAmount) => {
+    logErc20Services.getBalanceOf( _walletAddress, _tokenAddress )
+    await erc20Services.wrapEthAmtByAddress(_wallet, _wethAddress, _ethAmountInWei)
 }
 
-tokenAddressToWeiTest = async( _tokenAddress, _amount ) => {
-    let wei = await erc20Services.tokenAddrToBigintAmt( _tokenAddress, _amount )
-    let tokenContract = erc20Services.getERC20Contract( _tokenAddress );
-    let tokenName = await tokenContract.name()
-    console.log(`tokenAddressToWeiTest: ${_amount} ${tokenName} token(s) equals ${ wei.toString()} wei`);
+unwrapEthAmtByAddressTest = async(_wallet, _wethAddress, _ethAmount) => {
+    logErc20Services.getBalanceOf( _walletAddress, _tokenAddress )
+    await erc20Services.unwrapEthAmtByAddress(_wallet, _wethAddress, _wethAmountInWei)
 }
 
-tokenContractToWeiTest = async( _tokenAddress, _amount ) => {
-    let tokenContract = erc20Services.getERC20Contract( _tokenAddress );
-    let tokenName = await tokenContract.name()
-    let wei = await erc20Services.tokenContractAmtToBigInt( tokenContract, _amount )
-    console.log(`tokenContractToWeiTest: ${_amount} ${tokenName} token(s) equals ${ wei.toString()} wei`);
+wrapEthAmtByContractTest = async(_wallet, _wethAddress, _ethAmount) => {
+    let wethContract = getContractBalanceOf.getERC20Contract(_wethAddress );
+    logErc20Services.getBalanceOf( _walletAddress, _tokenAddress )
+    await erc20Services.wrapEthAmtByContract(_wallet, wethContract, _ethAmountInWei)
 }
 
-wethToEthByAddressTest = async( _wallerAddr, _wethAddr, _wethAmountInWei ) => {
-    console.log("wethToEthByAddressTest( )");
-    let wallet            = erc20Services.wallet( _wallerAddr )
-    let wethAddr          = WETH_ADDRESS
-    let tokenOutAddr      = UNI_ADDRESS
-    let exactOutputAmount = '0.001'
-    let slippagePercent   = 25;
-    let gasLimit          = 1000000
-    console.log("SWAPPING", exactOutputAmount, await erc20Services.getNameSymbol(tokenInAddr), "For", await erc20Services.getNameSymbol(tokenOutAddr));
-
-    let exactOutputTestRoute = await getExactInputTestRoute ( 
-                                        wallet,
-                                        tokenInAddr,
-                                        tokenOutAddr,
-                                        exactOutputAmount,
-                                        slippagePercent,
-                                        gasLimit
-                                    )
-    await execTransaction(
-        wallet,
-        exactOutputTestRoute,
-        gasLimit
-    )
+unwrapEthAmtByContractTest = async(_wallet, _wethAddress, _ethAmount) => {
+    let wethContract = erc20Services.getERC20Contract(_wethAddress );
+    logErc20Services.getBalanceOf( _walletAddress, _tokenAddress )
+    await erc20Services.unwrapEthAmtByContract(_wallet, wethContract, _wethAmountInWei)
 }
 
 main = async( ) => {
         // wethToEthByAddressTest(WALLET_SECRET, WETH_ADDRESS, 1)
 
-    wallet = erc20Services.Wallet(WALLET_SECRET)
+    let wallet = erc20Services.Wallet(WALLET_SECRET)
+    let ethAmount = 0.0123
  
-    tokenAmountToWeiTest( 1, 5 )
     console.log("------------------------------------------------------------------------------------------------")
-    await tokenAddressToWeiTest(WETH_ADDRESS, 1)
-    console.log("------------------------------------------------------------------------------------------------")
-    await tokenContractToWeiTest(WETH_ADDRESS, 1)
-
-    // let wei = ethers.utils.parseUnits("" + 10, decimals)
-    // console.log("wei:",wei.toString());
-
-    // return CurrencyAmount.fromRawAmount(uniToken, JSBI.BigInt(wei))    
-    
-    console.log("------------------------------------------------------------------------------------------------")
+    await wrapEthAmtByAddressTest(_wallet, WETH_ADDRESS, ethAmount)
+    // console.log("------------------------------------------------------------------------------------------------")
+    // await unwrapEthAmtByAddressTest(_wallet, WETH_ADDRESS, ethAmount)
+    // console.log("------------------------------------------------------------------------------------------------")
+    // await wrapEthAmtByContractTest(_wallet, WETH_ADDRESS, ethAmount)
+    // console.log("------------------------------------------------------------------------------------------------")
+    // await unwrapEthAmtByContractTest(_wallet, WETH_ADDRESS, ethAmount)
+    // console.log("------------------------------------------------------------------------------------------------")
     console.log("TESTING FINISHED: EXITING")
 }
 

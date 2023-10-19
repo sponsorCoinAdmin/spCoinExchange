@@ -53,7 +53,7 @@ bigIntToTokenContractAmtTest = async( _tokenAddress, _amount ) => {
 
 main = async( ) => {
     // wethToEthByAddressTest(WALLET_SECRET, WETH_ADDRESS, 1)
-    wallet = erc20Services.Wallet(WALLET_SECRET)
+    // wallet = erc20Services.Wallet(WALLET_SECRET)
     console.log("----------------------------------------------------------------------------------------------------------------")
     tokenAmountToWeiTest( 1, 18 )
     console.log("----------------------------------------------------------------------------------------------------------------")
