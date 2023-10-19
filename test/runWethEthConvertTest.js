@@ -18,13 +18,13 @@ let erc20Services = new ERC20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
 // let provider = erc20Services.provider
 let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug( erc20Services ) : new AlphaRouterService( erc20Services );
 
-tokenNumberToWeiTest = ( _number, _decimals ) => {
-    let wei = erc20Services.tokenNumberToWei( _number, _decimals )
-    console.log(`tokenNumberToWeiTest: ${_number} token(s) equals ${ wei.toString()} wei`);
+tokenAmountToWeiTest = ( _number, _decimals ) => {
+    let wei = erc20Services.tokenToBigIntAmt( _number, _decimals )
+    console.log(`tokenAmountToWeiTest: ${_number} token(s) equals ${ wei.toString()} wei`);
 }
 
 tokenAddressToWeiTest = async( _tokenAddress, _amount ) => {
-    let wei = await erc20Services.tokenAddressToWei( _tokenAddress, _amount )
+    let wei = await erc20Services.tokenAddrToBigintAmt( _tokenAddress, _amount )
     let tokenContract = erc20Services.getERC20Contract( _tokenAddress );
     let tokenName = await tokenContract.name()
     console.log(`tokenAddressToWeiTest: ${_amount} ${tokenName} token(s) equals ${ wei.toString()} wei`);
@@ -33,7 +33,7 @@ tokenAddressToWeiTest = async( _tokenAddress, _amount ) => {
 tokenContractToWeiTest = async( _tokenAddress, _amount ) => {
     let tokenContract = erc20Services.getERC20Contract( _tokenAddress );
     let tokenName = await tokenContract.name()
-    let wei = await erc20Services.tokenContractToWei( tokenContract, _amount )
+    let wei = await erc20Services.tokenContractAmtToBigInt( tokenContract, _amount )
     console.log(`tokenContractToWeiTest: ${_amount} ${tokenName} token(s) equals ${ wei.toString()} wei`);
 }
 
@@ -67,7 +67,7 @@ main = async( ) => {
 
     wallet = erc20Services.Wallet(WALLET_SECRET)
  
-    tokenNumberToWeiTest( 1, 5 )
+    tokenAmountToWeiTest( 1, 5 )
     console.log("------------------------------------------------------------------------------------------------")
     await tokenAddressToWeiTest(WETH_ADDRESS, 1)
     console.log("------------------------------------------------------------------------------------------------")
