@@ -12,7 +12,6 @@ const QUOTER_ADDRESS = '0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6'
 const QUOTER2_ADDRESS = '0x61fFE014bA17989E743c5F6cB21bF9697530B21e'
 
 INFURA_URL="https://mainnet.infura.io/v3/a379b9641c8640d2ac8206b8adcfa060"
-provider = new JsonRpcProvider(INFURA_URL);
 
 const tokenIn  = WETH_ADDRESS;
 const tokenOut = USDC_ADDRESS;

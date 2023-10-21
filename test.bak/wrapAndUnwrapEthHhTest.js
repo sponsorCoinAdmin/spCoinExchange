@@ -1,6 +1,9 @@
 require("dotenv").config();
 const { ethers } = require('ethers')
 const ERC20ABI = require('../lib/interfaces/abi.json')
+const SPCOIN_ABI = require('../lib/interfaces/SPCOIN_ABI.json')
+const WETH_ABI = require('../lib/interfaces/WETH_ABI.json')
+
 
 describe("wrapAndUnwrapEthHHTest: Wrap 10 ETH and then unwrap 5 ETH"
 , function () {
