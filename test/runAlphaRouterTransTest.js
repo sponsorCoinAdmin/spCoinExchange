@@ -1,10 +1,10 @@
 require("dotenv").config();
-let DEBUG_MODE = true;
+let DEBUG_MODE = false;
 
 const { ethers } = require('ethers')
 const { TradeType } = require('@uniswap/sdk-core')
 
-const { AlphaRouterServiceDebug } = require('../lib/debug/AlphaRouterServiceDebug')
+const { AlphaRouterDebugService } = require('../lib/debug/AlphaRouterDebugService')
 const { AlphaRouterService, ERC20Services } = require('../lib/prod/AlphaRouterService');
 
 const GOERLI_INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
@@ -15,13 +15,15 @@ const WETH_ADDRESS = process.env.GOERLI_WETH
 const SPCOIN_ADDRESS = process.env.GOERLI_SPCOIN
 const UNI_ADDRESS = process.env.GOERLI_UNI
 
-let erc20Services = new ERC20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
+const erc20Services = new ERC20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
+const erc20DebugServices = new Erc20DebugServices(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
+const alphaRouterService      = new AlphaRouterService(erc20Services)
+const alphaRouterDebugService = new AlphaRouterDebugService(erc20Services)
 // let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL)
 // let provider = erc20Services.provider
-let ARS = DEBUG_MODE ? new AlphaRouterServiceDebug( erc20Services ) : new AlphaRouterService( erc20Services );
+let ARS = DEBUG_MODE ? alphaRouterDebugService : alphaRouterService ;
 
 //  NEW CODING
-
 execTransaction = async(wallet, exactInputTestRoute, gasLimit ) => {
     await ARS.execTransaction(
         wallet,

@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const { ethers } = require('ethers')
-const { ERC20Services, DebugErc20Services } = require('../lib/prod/debugErc20Services');
+const { ERC20Services, Erc20DebugServices } = require('../lib/debug/Erc20DebugServices');
 
 const GOERLI_INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
 const CHAIN_ID = parseInt(process.env.GOERLI_CHAIN_ID)
@@ -10,7 +10,7 @@ const WETH_ABI = require('../lib/interfaces/WETH_ABI.json')
 const WETH_ADDRESS = process.env.GOERLI_WETH
 
 let erc20Services = new ERC20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
-let debugErc20Services = new DebugErc20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
+let debugErc20Services = new Erc20DebugServices(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
 
 DEBUG_MODE=true
 let DBM = DEBUG_MODE ? debugErc20Services : erc20Services;

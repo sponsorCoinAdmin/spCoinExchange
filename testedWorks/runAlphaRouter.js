@@ -1,6 +1,7 @@
 const { AlphaRouter } = require('@uniswap/smart-order-router')
 const { Token, CurrencyAmount, TradeType, Percent } = require('@uniswap/sdk-core')
 const { ethers, BigNumber } = require('ethers')
+const ERC20ABI = require('../lib/interfaces/abi.json')
 const JSBI  = require('jsbi') // jsbi@3.2.5
 
 const V3_SWAP_ROUTER_ADDRESS = '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'
@@ -58,7 +59,6 @@ async function main() {
   const connectedWallet = wallet.connect(web3Provider)
 
   const approvalAmount = ethers.utils.parseUnits('1', 18).toString()
-  const ERC20ABI = require('./lib/interfaces/abi.json')
   const contract0 = new ethers.Contract(address0, ERC20ABI, web3Provider)
   await contract0.connect(connectedWallet).approve(
     V3_SWAP_ROUTER_ADDRESS,
