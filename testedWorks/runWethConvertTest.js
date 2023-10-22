@@ -13,7 +13,7 @@ let erc20Services = new ERC20Services(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
 let debugErc20Services = new Erc20DebugServices(ethers, GOERLI_INFURA_TEST_URL, CHAIN_ID)
 
 DEBUG_MODE=true
-let DBM = DEBUG_MODE ? debugErc20Services : erc20Services;
+let ECR20 = DEBUG_MODE ? debugErc20Services : erc20Services;
 
 async function wrapEthTest( _ethAmountInWei ) {
     let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL);
@@ -26,25 +26,25 @@ async function wrapEthTest( _ethAmountInWei ) {
 }
 
 wrapEthAmtByAddressTest = async(_wallet, _wethAddress, _ethAmount) => {
-    await DBM.wrapEthAmtByAddress(_wallet, _wethAddress, _ethAmount)
+    await ECR20.wrapEthAmtByAddress(_wallet, _wethAddress, _ethAmount)
 }
 
 unwrapEthAmtByAddressTest = async(_wallet, _wethAddress, _ethAmount) => {
-    await DBM.unwrapEthAmtByAddress(_wallet, _wethAddress, _ethAmount)
+    await ECR20.unwrapEthAmtByAddress(_wallet, _wethAddress, _ethAmount)
 }
 
 wrapEthAmtByContractTest = async(_wallet, _wethAddress, _ethAmount) => {
-    let wethContract = DBM.getWETHContract(_wethAddress );
-    await DBM.wrapEthAmtByContract(_wallet, wethContract, _ethAmount)
+    let wethContract = ECR20.getWETHContract(_wethAddress );
+    await ECR20.wrapEthAmtByContract(_wallet, wethContract, _ethAmount)
 }
 
 unwrapEthAmtByContractTest = async(_wallet, _wethAddress, _ethAmount) => {
-    let wethContract = DBM.getWETHContract(_wethAddress );
-    await DBM.unwrapEthAmtByContract(_wallet, wethContract, _ethAmount)
+    let wethContract = ECR20.getWETHContract(_wethAddress );
+    await ECR20.unwrapEthAmtByContract(_wallet, wethContract, _ethAmount)
 }
 
 main = async( ) => {
-    let wallet = DBM.Wallet(WALLET_SECRET)
+    let wallet = ECR20.Wallet(WALLET_SECRET)
     let ethAmount = 0.0123
     console.log("------------------------------------------------------------------------------------------------")
     await wrapEthAmtByAddressTest(wallet, WETH_ADDRESS, ethAmount)

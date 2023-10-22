@@ -236,7 +236,7 @@ exactInputSpCoinToUniTransTestNew = async( _wallet ) => {
 }
 
 main = async( ) => {
-    let wallet = erc20Services.wallet(WALLET_SECRET)
+    let wallet = erc20Services.Wallet(WALLET_SECRET)
 
     await getExactInputSpCoinToUniStrQuoteTest();
     console.log("---------------------------------------------------------------------------------------");

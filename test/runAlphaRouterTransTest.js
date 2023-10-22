@@ -6,6 +6,7 @@ const { TradeType } = require('@uniswap/sdk-core')
 
 const { AlphaRouterDebugService } = require('../lib/debug/AlphaRouterDebugService')
 const { AlphaRouterService, ERC20Services } = require('../lib/prod/AlphaRouterService');
+const { Erc20DebugServices } = require('../lib/debug/Erc20DebugServices');
 
 const GOERLI_INFURA_TEST_URL = process.env.GOERLI_INFURA_TEST_URL
 const CHAIN_ID = parseInt(process.env.GOERLI_CHAIN_ID)
@@ -22,6 +23,7 @@ const alphaRouterDebugService = new AlphaRouterDebugService(erc20Services)
 // let provider = new ethers.providers.JsonRpcProvider(GOERLI_INFURA_TEST_URL)
 // let provider = erc20Services.provider
 let ARS = DEBUG_MODE ? alphaRouterDebugService : alphaRouterService ;
+let ECR20 = DEBUG_MODE ? erc20DebugServices : erc20Services;
 
 //  NEW CODING
 execTransaction = async(wallet, exactInputTestRoute, gasLimit ) => {
@@ -99,7 +101,7 @@ getTestRoute = async(
 
 exactInputSpCoinToUniTransTest = async( ) => {
     console.log("exactInputWethToUniTransTest( )");
-    let wallet           = erc20Services.wallet( WALLET_SECRET )
+    let wallet           = erc20Services.Wallet( WALLET_SECRET )
     let tokenInAddr      = SPCOIN_ADDRESS
     let tokenOutAddr     = UNI_ADDRESS
     let exactInputAmount = '1'
@@ -124,7 +126,7 @@ exactInputSpCoinToUniTransTest = async( ) => {
 
 exactOutputSpCoinToUniTransTest = async( ) => {
     console.log("exactOutputWethToUniTransTest( )");
-    let wallet            = erc20Services.wallet( WALLET_SECRET )
+    let wallet            = erc20Services.Wallet( WALLET_SECRET )
     let tokenInAddr       = SPCOIN_ADDRESS
     let tokenOutAddr      = UNI_ADDRESS
     let exactOutputAmount = '1'
@@ -150,7 +152,7 @@ exactOutputSpCoinToUniTransTest = async( ) => {
 ///////////////////////////////////////////////////////////////////////////////////
 exactInputWethToUniTransTest = async( ) => {
     console.log("exactInputWethToUniTransTest( )");
-    let wallet           = erc20Services.wallet( WALLET_SECRET )
+    let wallet           = erc20Services.Wallet( WALLET_SECRET )
     let tokenInAddr      = WETH_ADDRESS
     let tokenOutAddr     = UNI_ADDRESS
     let exactInputAmount = '0.001'
@@ -175,7 +177,7 @@ exactInputWethToUniTransTest = async( ) => {
 
 exactOutputWethToUniTransTest = async( ) => {
     console.log("exactOutputWethToUniTransTest( )");
-    let wallet            = erc20Services.wallet( WALLET_SECRET )
+    let wallet            = erc20Services.Wallet( WALLET_SECRET )
     let tokenInAddr       = WETH_ADDRESS
     let tokenOutAddr      = UNI_ADDRESS
     let exactOutputAmount = '0.001'
